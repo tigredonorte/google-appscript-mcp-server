@@ -89,6 +89,53 @@ npm run setup-oauth
 npm start
 ```
 
+### 1.1 MCP config for Node.js
+Edit your `claude_desktop_config.json` file:
+- **Windows**: `%APPDATA%\Claude\claude_desktop_config.json`
+- **macOS**: `~/Library/Application Support/Claude/claude_desktop_config.json`
+- **Linux**: `~/.config/Claude/claude_desktop_config.json`
+
+```json
+{
+  "mcpServers": {
+    "google-apps-script": {
+      "command": "node",
+      "args": ["/path/to/google-appscript-mcp-server/mcpServer.js"],
+      "env": {
+        "GOOGLE_APP_SCRIPT_API_CLIENT_ID": "your_client_id",
+        "GOOGLE_APP_SCRIPT_API_CLIENT_SECRET": "your_client_secret"
+      }
+    }
+  }
+}
+```
+
+### 1.2 MCP config for Docker
+Build the Docker image:
+```bash
+docker build -t google-appscript-mcp:latest .
+```
+
+Edit your `claude_desktop_config.json` file:
+```json
+{
+  "mcpServers": {
+    "google-apps-script": {
+      "command": "docker",
+      "args": [
+        "run",
+        "--rm",
+        "-i",
+        "-e", "GOOGLE_APP_SCRIPT_API_CLIENT_ID=your_client_id",
+        "-e", "GOOGLE_APP_SCRIPT_API_CLIENT_SECRET=your_client_secret",
+        "-v", "google-appscript-tokens:/home/app/.config/google-apps-script-mcp",
+        "google-appscript-mcp:latest"
+      ]
+    }
+  }
+}
+```
+
 ## 📖 Detailed Setup Instructions
 
 ### Step 1: Clone and Install
